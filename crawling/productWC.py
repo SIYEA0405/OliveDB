@@ -1,6 +1,9 @@
-import requests
+import requests, re
 from bs4 import BeautifulSoup
 import categoryNo as category_numbers
+
+def remove_brackets_reg_exp(pdname):
+  return re.sub(r'\[.*?\](?=\s|$)', '', pdname).strip()
 
 # 각 카테고리별로 상품저장
 def get_products_data(catNo, pageIdx=1):
@@ -16,7 +19,8 @@ def get_products_data(catNo, pageIdx=1):
       product_info_data = product_data.find("div", {"class": "prd_name"})
       product_price_data = product_data.find("p", {"class": "prd_price"}).find_all(class_='tx_num')
 
-      name =product_info_data.find("p", {"class":"tx_name"}).text
+      name = product_info_data.find("p", {"class":"tx_name"}).text
+      name = remove_brackets_reg_exp(name)
       brand =product_info_data.find("span", {"class":"tx_brand"}).text
       
       product_number = product_data.find("a").get("data-ref-goodsno")
