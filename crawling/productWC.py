@@ -8,14 +8,14 @@ def remove_brackets_reg_exp(pdname):
 
 
 # 각 카테고리별로 상품저장(초기데이터 구축)
-def get_products_data(catNo, pageIdx=1):
+def get_products_data(catNo, pageIdx):
     url = f"https://www.oliveyoung.co.kr/store/display/getMCategoryList.do?dispCatNo={catNo}&fltDispCatNo=&prdSort=01&pageIdx={pageIdx}&rowsPerPage=48&searchTypeSort=btn_thumb&plusButtonFlag=N&isLoginCnt=0&aShowCnt=0&bShowCnt=0&cShowCnt=0&trackingCd=Cat100000100010008_Small"
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
 
     if soup.select_one("p.cate_info_tx span").text.strip() == "0":
-        print(f'\033[31m{pageIdx}페이지가 없습니다')
-        return
+        print(f"\033[31m{pageIdx}페이지가 없습니다")
+        return None
 
     large_ctg = soup.find("a", {"class": "cate_y"}).text
     small_ctg = soup.find_all("h1")[1].text
@@ -70,4 +70,9 @@ def get_products_data(catNo, pageIdx=1):
 
 
 # 여기서 pageIdx가 있는지부터 확인
-get_products_data("100000100010008")
+page_index = 1
+while True:
+    result = get_products_data("100000100010008", page_index)
+    if result is None:
+        break
+    page_index += 1
