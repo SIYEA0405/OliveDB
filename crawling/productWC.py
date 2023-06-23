@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import categoryNo as category_numbers
 
 def remove_brackets_reg_exp(pdname):
-  return re.sub(r'\[.*?\](?=\s|$)', '', pdname).strip()
+  return re.sub(r'\[.*?\]', '', pdname).strip()
 
 # 각 카테고리별로 상품저장
 def get_products_data(catNo, pageIdx=1):
