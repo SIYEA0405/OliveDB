@@ -13,6 +13,10 @@ def get_products_data(catNo, pageIdx=1):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
 
+    if soup.select_one("p.cate_info_tx span").text.strip() == "0":
+        print(f'\033[31m{pageIdx}페이지가 없습니다')
+        return
+
     large_ctg = soup.find("a", {"class": "cate_y"}).text
     small_ctg = soup.find_all("h1")[1].text
 
@@ -65,4 +69,5 @@ def get_products_data(catNo, pageIdx=1):
     return products_collection
 
 
+# 여기서 pageIdx가 있는지부터 확인
 get_products_data("100000100010008")
