@@ -1,5 +1,6 @@
 import requests, re
 from bs4 import BeautifulSoup
+from datetime import datetime
 import categoryNo as category_numbers
 
 
@@ -24,6 +25,7 @@ def get_products_data(catNo, pageIdx):
 
     products_collection = []
     date_collection = []
+    now = datetime.now()
 
     for product_data in all_products_data:
         try:
@@ -62,17 +64,28 @@ def get_products_data(catNo, pageIdx):
                     "small_ctg": small_ctg,
                 }
             )
+            date_collection.append(
+                {
+                    "_id": product_number,
+                    "date": now.strftime("%Y-%m-%d"),
+                    "price": current_price,
+                }
+            )
         except Exception as e:
             print("데이터를 받아오는 동안 예외가 발생했습니다:", str(e))
 
     print(f"\033[92m{pageIdx}\033[95m페이지\033[93m{len(products_collection)}\033[95m개 완료")
-    return products_collection
+    return [products_collection, date_collection]
 
 
-# 여기서 pageIdx가 있는지부터 확인
-page_index = 1
-while True:
-    result = get_products_data("100000100010008", page_index)
-    if result is None:
-        break
-    page_index += 1
+# 1페이지부터 마지막페이지까지 카테고리별로 데이터 크롤링
+def crawlProducts(category_num):
+    page_index = 1
+    data_list = [{"products_data": []}, {"prices_by_date": []}]
+    while True:
+        result = get_products_data(category_num, page_index)
+        if result is None:
+            return data_list
+        data_list[0]["products_data"].extend(result[0])
+        data_list[1]["prices_by_date"].extend(result[1])
+        page_index += 1
