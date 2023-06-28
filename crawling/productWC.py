@@ -61,7 +61,7 @@ def get_products_data(catNo, pageIdx):
                         "lowest": current_price,
                     },
                     "large_ctg": large_ctg,
-                    "small_ctg": small_ctg,
+                    "small_ctg": [small_ctg],
                 }
             )
             date_collection.append(
