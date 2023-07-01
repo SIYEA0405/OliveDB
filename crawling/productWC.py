@@ -1,7 +1,6 @@
 import requests, re
 from bs4 import BeautifulSoup
 from datetime import datetime
-import categoryNo as category_numbers
 
 
 def remove_brackets_reg_exp(pdname):
@@ -55,10 +54,10 @@ def get_products_data(catNo, pageIdx):
                     "name": re_name,
                     "brand": brand,
                     "price": {
-                        "original": original_price,
-                        "current": current_price,
+                        "original": int(original_price),
+                        "current": int(current_price),
                         # 초기버전이기 때문에 업데이트시 수정할 것
-                        "lowest": current_price,
+                        "lowest": int(current_price),
                     },
                     "large_ctg": large_ctg,
                     "small_ctg": small_ctg,
@@ -68,24 +67,30 @@ def get_products_data(catNo, pageIdx):
                 {
                     "_id": product_number,
                     "date": now.strftime("%Y-%m-%d"),
-                    "price": current_price,
+                    "price": int(current_price),
                 }
             )
-        except Exception as e:
-            print("데이터를 받아오는 동안 예외가 발생했습니다:", str(e))
+        except Exception as error:
+            print("데이터를 받아오는 동안 예외가 발생했습니다:", str(error))
 
     print(f"\033[92m{pageIdx}\033[95m페이지\033[93m{len(products_collection)}\033[95m개 완료")
-    return [products_collection, date_collection]
+    return {
+        "products_collection": products_collection,
+        "date_collection": date_collection,
+    }
 
 
 # 1페이지부터 마지막페이지까지 카테고리별로 데이터 크롤링
 def crawlProducts(category_num):
     page_index = 1
-    data_list = [{"products_data": []}, {"prices_by_date": []}]
+    data_list = {
+        "products_collection": [],
+        "date_collection": [],
+    }
     while True:
         result = get_products_data(category_num, page_index)
         if result is None:
             return data_list
-        data_list[0]["products_data"].extend(result[0])
-        data_list[1]["prices_by_date"].extend(result[1])
+        data_list["products_collection"].extend(result["products_collection"])
+        data_list["date_collection"].extend(result["date_collection"])
         page_index += 1
