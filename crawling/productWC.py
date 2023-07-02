@@ -7,14 +7,13 @@ def remove_brackets_reg_exp(pdname):
     return re.sub(r"\[.*?\]", "", pdname).strip()
 
 
-# 각 카테고리별로 상품저장(초기데이터 구축)
 def get_products_data(catNo, pageIdx):
     url = f"https://www.oliveyoung.co.kr/store/display/getMCategoryList.do?dispCatNo={catNo}&fltDispCatNo=&prdSort=01&pageIdx={pageIdx}&rowsPerPage=48&searchTypeSort=btn_thumb&plusButtonFlag=N&isLoginCnt=0&aShowCnt=0&bShowCnt=0&cShowCnt=0&trackingCd=Cat100000100010008_Small"
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
 
     if soup.select_one("p.cate_info_tx span").text.strip() == "0":
-        print(f"\033[31m{pageIdx}페이지가 없습니다")
+        print(f"\033[31m{pageIdx}페이지가 없습니다\033[0m")
         return None
 
     large_ctg = soup.find("a", {"class": "cate_y"}).text
@@ -60,9 +59,10 @@ def get_products_data(catNo, pageIdx):
                         "lowest": int(current_price),
                     },
                     "large_ctg": large_ctg,
-                    "small_ctg": small_ctg,
+                    "small_ctg": [small_ctg],
                 }
             )
+
             date_collection.append(
                 {
                     "_id": product_number,
@@ -84,7 +84,6 @@ def get_products_data(catNo, pageIdx):
     }
 
 
-# 1페이지부터 마지막페이지까지 카테고리별로 데이터 크롤링
 def crawlProducts(category_num):
     page_index = 1
     data_list = {
