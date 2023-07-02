@@ -66,8 +66,12 @@ def get_products_data(catNo, pageIdx):
             date_collection.append(
                 {
                     "_id": product_number,
-                    "date": now.strftime("%Y-%m-%d"),
-                    "price": int(current_price),
+                    "dates": [
+                        {
+                            "date": now.strftime("%Y-%m-%d"),
+                            "price": int(current_price),
+                        }
+                    ],
                 }
             )
         except Exception as error:
