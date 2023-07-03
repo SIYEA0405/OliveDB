@@ -55,7 +55,6 @@ def get_products_data(catNo, pageIdx):
                     "price": {
                         "original": int(original_price),
                         "current": int(current_price),
-                        # 초기버전이기 때문에 업데이트시 수정할 것
                         "lowest": int(current_price),
                     },
                     "large_ctg": large_ctg,
