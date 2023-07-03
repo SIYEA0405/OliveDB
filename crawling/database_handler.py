@@ -20,7 +20,7 @@ except errors.ConnectionFailure:
     print("MongoDB 서버 연결 불가")
 
 db = client["products_database"]
-product_collection = db["products"]
+products_collection = db["products"]
 price_by_date_collection = db["price_by_date"]
 
 now = datetime.now()
