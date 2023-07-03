@@ -1,6 +1,7 @@
 import os, time
 from dotenv import load_dotenv
 
+from datetime import datetime
 from pymongo import MongoClient, errors
 from productWC import crawlProducts
 from categoryNo import category_numbers
@@ -22,6 +23,8 @@ db = client["products_database"]
 product_collection = db["products"]
 price_by_date_collection = db["price_by_date"]
 
+now = datetime.now()
+
 
 def time_decorator(func):
     def wrapper(*args, **kwargs):
@@ -37,33 +40,37 @@ def time_decorator(func):
     return wrapper
 
 
-def update_or_insert_product(price_collection, new_product_date):
-    result = price_collection.update_one(
-        {
-            "_id": new_product_date["_id"],
-            "dates": {"$elemMatch": {"date": new_product_date["dates"][-1]["date"]}},
-        },
-        {
-            "$set": {"dates.$[element].price": new_product_date["dates"][-1]["price"]},
-        },
-        array_filters=[{"element.date": new_product_date["dates"][-1]["date"]}],
-    )
+from datetime import datetime
 
-    if result.modified_count == 0:
-        price_collection.update_one(
-            {"_id": new_product_date["_id"]},
-            {
-                "$push": {"dates": new_product_date["dates"][-1]},
-            },
-            upsert=True,
-        )
+
+def update_or_insert_product(new_product_date):
+    current_date = now.strftime("%Y-%m-%d")
+    new_price = new_product_date["dates"][-1]["price"]
+    product_id = new_product_date["_id"]
+    price_in_db = price_by_date_collection.find_one({"_id": product_id})
+
+    if not price_in_db:
+        price_by_date_collection.insert_one(new_product_date)
+
+    else:
+        if price_in_db["dates"][-1]["date"] == current_date:
+            price_by_date_collection.update_one(
+                {"_id": product_id, "dates.date": current_date},
+                {"$set": {"dates.$.price": new_price}},
+            )
+        else:
+            price_by_date_collection.update_one(
+                {"_id": product_id},
+                {"$push": {"dates": {"date": current_date, "price": new_price}}},
+                upsert=True,
+            )
 
 
 @time_decorator
 def all_pages_crawl():
     for category_dict in category_numbers:
         for category, numbers in category_dict.items():
-            for number in numbers:
+            for index, number in enumerate(numbers):
                 crawlDatas = crawlProducts(number)
                 products_collection, date_collection = (
                     crawlDatas["products_collection"],
@@ -99,12 +106,16 @@ def all_pages_crawl():
 
                 for product_date in date_collection:
                     try:
-                        update_or_insert_product(price_by_date_collection, product_date)
+                        update_or_insert_product(product_date)
                     except errors.ServerSelectionTimeoutError as err:
                         print("Could not connect to server: %s", err)
 
                 print("날짜 및 가격 데이터 저장 완료")
-    return print(f"\033[42m{category}의 모든 데이터 저장이 완료되었습니다.\033[0m")
+                print(
+                    f"\033[104m{category}의 {index+1}/{len(numbers)} 데이터 저장이 완료\033[0m"
+                )
+            print(f"\033[42m{category}의 모든 데이터 저장이 완료되었습니다.\033[0m")
+    return
 
 
 all_pages_crawl()
