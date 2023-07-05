@@ -72,13 +72,13 @@ def all_pages_crawl():
         for category, numbers in category_dict.items():
             for index, number in enumerate(numbers):
                 crawlDatas = crawlProducts(number)
-                products_collection, date_collection = (
-                    crawlDatas["products_collection"],
-                    crawlDatas["date_collection"],
+                products_data, dates_data = (
+                    crawlDatas["products_data"],
+                    crawlDatas["dates_data"],
                 )
-                for product_data in products_collection:
+                for product_data in products_data:
                     try:
-                        product_collection.update_one(
+                        products_collection.update_one(
                             {"_id": product_data["_id"]},
                             {
                                 "$set": {
@@ -104,7 +104,7 @@ def all_pages_crawl():
 
                 print("상품의 데이터 저장 완료")
 
-                for product_date in date_collection:
+                for product_date in dates_data:
                     try:
                         update_or_insert_product(product_date)
                     except errors.ServerSelectionTimeoutError as err:

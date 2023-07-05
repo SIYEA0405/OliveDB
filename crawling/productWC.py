@@ -21,8 +21,8 @@ def get_products_data(catNo, pageIdx):
 
     all_products_data = soup.find_all("div", {"class": "prd_info"})
 
-    products_collection = []
-    date_collection = []
+    products_data = []
+    dates_data = []
     now = datetime.now()
 
     for product_data in all_products_data:
@@ -47,7 +47,7 @@ def get_products_data(catNo, pageIdx):
             else:
                 original_price = product_price_data[0].text.replace(",", "")
                 current_price = product_price_data[1].text.replace(",", "")
-            products_collection.append(
+            products_data.append(
                 {
                     "_id": product_number,
                     "name": re_name,
@@ -62,7 +62,7 @@ def get_products_data(catNo, pageIdx):
                 }
             )
 
-            date_collection.append(
+            dates_data.append(
                 {
                     "_id": product_number,
                     "dates": [
@@ -76,23 +76,23 @@ def get_products_data(catNo, pageIdx):
         except Exception as error:
             print("데이터를 받아오는 동안 예외가 발생했습니다:", str(error))
 
-    print(f"\033[92m{pageIdx}\033[95m페이지\033[93m{len(products_collection)}\033[95m개 완료")
+    print(f"\033[92m{pageIdx}\033[95m페이지\033[93m{len(products_data)}\033[95m개 완료")
     return {
-        "products_collection": products_collection,
-        "date_collection": date_collection,
+        "products_data": products_data,
+        "dates_data": dates_data,
     }
 
 
 def crawlProducts(category_num):
     page_index = 1
     data_list = {
-        "products_collection": [],
-        "date_collection": [],
+        "products_data": [],
+        "dates_data": [],
     }
     while True:
         result = get_products_data(category_num, page_index)
         if result is None:
             return data_list
-        data_list["products_collection"].extend(result["products_collection"])
-        data_list["date_collection"].extend(result["date_collection"])
+        data_list["products_data"].extend(result["products_data"])
+        data_list["dates_data"].extend(result["dates_data"])
         page_index += 1
