@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.api.endpoints import products_router
+from api.endpoints.products import products_router
 
 app = FastAPI()
 
