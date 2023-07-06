@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List
 
 
-class Dates:
+class Dates(BaseModel):
     date: str
     price: int
 
