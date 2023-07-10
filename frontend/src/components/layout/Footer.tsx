@@ -1,4 +1,4 @@
-import { Flex, VStack, Text, Link } from "@chakra-ui/react";
+import { Flex, FlexProps, VStack, Text, Link } from "@chakra-ui/react";
 interface FooterProps extends FlexProps {}
 const Footer: React.FC<FooterProps> = (props) => {
   return (
