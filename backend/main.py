@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from api.endpoints.products import products_router
+from api.endpoints.products import router
 
 app = FastAPI()
 
-app.include_router(products_router, prefix="/api/endpoints")
+app.include_router(router, prefix="/api/endpoints")
 
 
 @app.get("/")
