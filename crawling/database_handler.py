@@ -33,14 +33,11 @@ def time_decorator(func):
         end_time = time.time()
         elapsed_time = end_time - start_time
         elapsed_time_minutes = elapsed_time / 60
-        print(f"\033[35m{func.__name__} 실행 시간: {elapsed_time_minutes}분\033[0m")
+        print(f"\033[35m크롤링 실행: {round(elapsed_time_minutes),2}분\033[0m")
         print("크롤링 완료:", now.date().strftime("%Y년 %m월 %d일"))
         return result
 
     return wrapper
-
-
-from datetime import datetime
 
 
 def update_or_insert_product(new_product_date):
