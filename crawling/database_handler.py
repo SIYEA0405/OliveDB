@@ -1,4 +1,4 @@
-import os, time
+import os, time, sys
 from dotenv import load_dotenv
 
 from datetime import datetime
@@ -18,6 +18,7 @@ try:
     print("MongoDB 서버 연결 확인")
 except errors.ConnectionFailure:
     print("MongoDB 서버 연결 불가")
+    sys.exit(1)
 
 db = client["products_database"]
 products_collection = db["products"]
@@ -33,7 +34,7 @@ def time_decorator(func):
         end_time = time.time()
         elapsed_time = end_time - start_time
         elapsed_time_minutes = elapsed_time / 60
-        print(f"\033[35m크롤링 실행: {round(elapsed_time_minutes),2}분\033[0m")
+        print(f"\033[35m크롤링 실행: {round(elapsed_time_minutes,2)}분\033[0m")
         print("크롤링 완료:", now.date().strftime("%Y년 %m월 %d일"))
         return result
 
