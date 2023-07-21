@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import axios from "axios";
 
 type Product = {
   _id: string;
@@ -13,22 +14,28 @@ type Product = {
   small_ctg: string[];
 };
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Product[]>
+  res: NextApiResponse<Product[] | { message: string }>
 ) {
-  res.status(200).json([
-    {
-      _id: "64abfffed7e3280256adfbc3",
-      brand: "라운드랩",
-      large_ctg: "스킨케어",
-      name: "라운드랩 1025 독도 토너 500ml+200ml 기획(+소나무 클렌저 10ml 증정)",
-      price: {
-        current: 29300,
-        lowest: 29300,
-        original: 45000,
+  const { search } = req.query;
+  const url = "http://127.0.0.1:8000/api/endpoints/products";
+  try {
+    const response = await axios.get(url, {
+      params: {
+        search: search,
       },
-      small_ctg: ["토너/로션/올인원"],
-    },
-  ]);
+    });
+    res.status(200).json(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(500).json({
+        message: error.message,
+      });
+    } else {
+      res.status(500).json({
+        message: "An unexpected error occurred.",
+      });
+    }
+  }
 }
