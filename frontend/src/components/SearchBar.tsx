@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+
 import axios from "axios";
 import {
   InputGroup,
@@ -15,15 +16,24 @@ interface SearchBarProps {}
 const SearchBar: React.FC<SearchBarProps> = () => {
   const [searchProduct, setSearchProduct] = useState("");
   const router = useRouter();
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const response = await axios.get(`/api/getProducts?search=${searchProduct}`);
-    // router.push({
-    //   pathname: "/showProduct",
-    //   query: { result: JSON.stringify(response) },
-    // });
-    router.push("/showProduct")
+    const response = await axios.get("/api/getProducts", {
+      params: {
+        search: searchProduct,
+      },
+    });
+    if (response.data.length === 1) {
+      router.push({
+        pathname: "/showProduct",
+        query: { result: JSON.stringify(response) },
+      });
+    } else {
+      router.push({
+        pathname: "/showProductList",
+        query: { result: JSON.stringify(response) },
+      });
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +43,7 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      handleSubmit();
+      handleSubmit(event);
     }
   };
   return (
