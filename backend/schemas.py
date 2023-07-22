@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List
 
 
-class Dates:
+class Dates(BaseModel):
     date: str
     price: int
 
@@ -14,7 +14,7 @@ class Price(BaseModel):
 
 
 class Product(BaseModel):
-    _id: str
+    _id: str = Field(..., alias="_id.$oid")
     name: str
     brand: str
     price: Price
@@ -23,5 +23,5 @@ class Product(BaseModel):
 
 
 class Price_by_date(BaseModel):
-    _id: str
+    _id: str = Field(..., alias="_id.$oid")
     dates: List[Dates]
