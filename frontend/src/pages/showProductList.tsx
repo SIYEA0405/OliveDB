@@ -1,6 +1,26 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-export default function showProductList() {
+import { useQuery } from "react-query";
+
+interface ProductDataProps {
+  _id: string;
+  brand: string;
+  large_ctg: string;
+  name: string;
+  price: {
+    current: number;
+    lowest: number;
+    original: number;
+  };
+  small_ctg: string[];
+}
+
+interface ShowProductListProps {
+  products: ProductDataProps[];
+
+}
+
+const ShowProductList: React.FC<ShowProductListProps> = ({ products }) => {
   return (
     <>
       <Head>
@@ -17,4 +37,6 @@ export default function showProductList() {
       </main>
     </>
   );
-}
+};
+
+export default ShowProductList;
