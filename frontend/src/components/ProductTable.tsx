@@ -1,16 +1,6 @@
 import { TableContainer, Table, Tbody, Tr, Td } from "@chakra-ui/react";
-interface ProductDataProps {
-  _id: string;
-  brand: string;
-  large_ctg: string;
-  name: string;
-  price: {
-    current: number;
-    lowest: number;
-    original: number;
-  };
-  small_ctg: string[];
-}
+import { ProductDataProps } from "../../types";
+
 export default function ProductTable({ ...productData }: ProductDataProps) {
   return (
     <>
