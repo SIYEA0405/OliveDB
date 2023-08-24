@@ -1,30 +1,50 @@
-import Head from "next/head";
-import styles from "@/styles/Home.module.css";
-import { useQuery } from "react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { ProductDataProps } from "../../types";
 
-interface ProductDataProps {
-  _id: string;
-  brand: string;
-  large_ctg: string;
-  name: string;
-  price: {
-    current: number;
-    lowest: number;
-    original: number;
-  };
-  small_ctg: string[];
-}
+import { fetchProducts } from "@/services/api";
+
+import { Flex, Text } from "@chakra-ui/react";
 
 interface ShowProductListProps {
   products: ProductDataProps[];
 }
 
-const ShowProductList: React.FC<ShowProductListProps> = ({ products }) => {
+const ShowProductList: React.FC<ShowProductListProps> = () => {
+  const router = useRouter();
+  const searchTerm = router.query.searchTerm;
+  const { data, isLoading, error } = useQuery(
+    ["products", searchTerm],
+    () => fetchProducts(searchTerm),
+    {
+      staleTime: Infinity,
+      enabled: !!searchTerm,
+    }
+  );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    console.error(error);
+  }
+
   return (
     <>
-      <main className={styles.main}>
-        <h1>{}로 검색한 결과는 총 0개 입니다.</h1>
-      </main>
+      <Flex alignItems="center">
+        <Text as="b" mr={2} fontSize="lg" color="tomato">
+          {searchTerm}
+        </Text>
+        <Text>
+          검색결과 총 <Text as="b">{data?.length ?? 0}</Text>개
+        </Text>
+      </Flex>
+      {data?.map((product) => (
+        <div key={product.id}>
+          <h3>{product.name}</h3>
+          <p>{product.brand}</p>
+        </div>
+      ))}
     </>
   );
 };
