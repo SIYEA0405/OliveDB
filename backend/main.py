@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-from api.endpoints.products import router
+from api.products import router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
+    "http://oliveDB.info",
 ]
 
 app.add_middleware(
@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router, prefix="/api/endpoints")
+app.include_router(router, prefix="/api")
 
 
 @app.get("/")
