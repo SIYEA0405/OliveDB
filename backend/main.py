@@ -6,6 +6,7 @@ app = FastAPI()
 
 origins = [
     "http://oliveDB.info",
+    "https://oliveDB.info",
 ]
 
 app.add_middleware(
@@ -17,8 +18,3 @@ app.add_middleware(
 )
 
 app.include_router(router, prefix="/api")
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
