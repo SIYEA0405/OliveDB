@@ -5,6 +5,7 @@ import { ProductDataProps } from "../../types";
 import { fetchProducts } from "@/services/api";
 
 import { Flex, Text } from "@chakra-ui/react";
+import ProductTable from "@/components/ProductTable";
 
 interface ShowProductListProps {
   products: ProductDataProps[];
@@ -39,12 +40,7 @@ const ShowProductList: React.FC<ShowProductListProps> = () => {
           검색결과 총 <Text as="b">{data?.length ?? 0}</Text>개
         </Text>
       </Flex>
-      {data?.map((product) => (
-        <div key={product.id}>
-          <h3>{product.name}</h3>
-          <p>{product.brand}</p>
-        </div>
-      ))}
+      <ProductTable data={data} />
     </>
   );
 };
