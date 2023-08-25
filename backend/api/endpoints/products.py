@@ -14,7 +14,6 @@ async def get_product(search: Optional[str] = None):
     query = {"name": {"$regex": regex, "$options": "i"}}
     products = []
     for product in products_collection.find(query):
-        product["_id"] = str(product["_id"])
         products.append(Product(**product))
     if not products:
         raise HTTPException(status_code=404, detail="No products found")
