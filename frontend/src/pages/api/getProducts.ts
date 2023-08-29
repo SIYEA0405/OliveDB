@@ -1,22 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
-
-type Product = {
-  _id: string;
-  brand: string;
-  large_ctg: string;
-  name: string;
-  price: {
-    current: number;
-    lowest: number;
-    original: number;
-  };
-  small_ctg: string[];
-};
+import { ProductDataProps } from "../../../types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Product[] | { message: string }>
+  res: NextApiResponse<ProductDataProps[] | { message: string }>
 ) {
   const { search } = req.query;
   const url = "http://127.0.0.1:8000/api/endpoints/products";
