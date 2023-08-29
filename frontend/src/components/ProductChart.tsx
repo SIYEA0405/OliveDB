@@ -1,35 +1,36 @@
 import { useEffect, useRef } from "react";
+import Chart from "chart.js/auto";
 
 interface ProductChartProps {
   data: number[];
   labels: string[];
 }
 
-// const ProductCahrt = ({ data, labels }: ProductChartProps) => {
-//   const chartContainer = useRef(null);
+const ProductCahrt = ({ data, labels }: ProductChartProps) => {
+  const chartContainer = useRef(null);
 
-//   useEffect(() => {
-//     if (chartContainer && chartContainer.current) {
-//       const newChartInstance = new Chart(chartContainer.current, {
-//         type: "line",
-//         data: {
-//           labels,
-//           datasets: [
-//             {
-//               label: "Sample Data",
-//               data,
-//             },
-//           ],
-//         },
-//       });
+  useEffect(() => {
+    if (chartContainer && chartContainer.current) {
+      const newChartInstance = new Chart(chartContainer.current, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "Sample Data",
+              data,
+            },
+          ],
+        },
+      });
 
-//       return () => {
-//         newChartInstance.destroy();
-//       };
-//     }
-//   }, [chartContainer, data, labels]);
+      return () => {
+        newChartInstance.destroy();
+      };
+    }
+  }, [chartContainer, data, labels]);
 
-//   return <canvas ref={chartContainer} />;
-// };
+  return <canvas ref={chartContainer} />;
+};
 
-// export default ProductCahrt;
+export default ProductCahrt;

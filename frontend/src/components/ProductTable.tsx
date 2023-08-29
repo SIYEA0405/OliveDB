@@ -1,91 +1,57 @@
-import { Box } from "@chakra-ui/react";
-import {
-  useReactTable,
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-} from "@tanstack/react-table";
-import { ProductDataProps } from "../../types";
-
-interface ProductTableProps {
-  data: ProductDataProps[];
+import { TableContainer, Table, Tbody, Tr, Td } from "@chakra-ui/react";
+interface ProductDataProps {
+  _id: string;
+  brand: string;
+  large_ctg: string;
+  name: string;
+  price: {
+    current: number;
+    lowest: number;
+    original: number;
+  };
+  small_ctg: string[];
 }
-
-const columnHelper = createColumnHelper<ProductDataProps>();
-
-const columns = [
-  columnHelper.accessor("_id", {
-    header: "id",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("name", {
-    header: "상품명",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("brand", {
-    header: "브랜드",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("price.original", {
-    header: "정가",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("price.current", {
-    header: "현재가",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("price.lowest", {
-    header: "최저가",
-    cell: (info) => info.getValue(),
-  }),
-];
-
-export default function ProductTable({ data }: ProductTableProps) {
-  const tableInstance = useReactTable({
-    columns,
-    data,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  });
+export default function ProductTable({ ...productData }: ProductDataProps) {
   return (
     <>
-      <Box borderWidth="1px" borderRadius="md">
-        <table>
-          <thead>
-            {tableInstance.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {tableInstance.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Box>
+      <TableContainer>
+        <Table variant="simple">
+          <Tbody>
+            <Tr>
+              <Td>상품번호(ID)</Td>
+              <Td>{productData._id}</Td>
+            </Tr>
+            <Tr>
+              <Td>이름(Name)</Td>
+              <Td>{productData.name}</Td>
+            </Tr>
+            <Tr>
+              <Td>브랜드(Brand)</Td>
+              <Td>{productData.brand}</Td>
+            </Tr>
+            <Tr>
+              <Td>가격(정가)</Td>
+              <Td>{productData.price.original}</Td>
+            </Tr>
+            <Tr>
+              <Td>가격(현재가)</Td>
+              <Td>{productData.price.current}</Td>
+            </Tr>
+            <Tr>
+              <Td>가격(역대최저가)</Td>
+              <Td>{productData.price.lowest}</Td>
+            </Tr>
+            <Tr>
+              <Td>메인 카테고리</Td>
+              <Td>{productData.large_ctg}</Td>
+            </Tr>
+            <Tr>
+              <Td>세부 카테고리</Td>
+              <Td>{productData.small_ctg}</Td>
+            </Tr>
+          </Tbody>
+        </Table>
+      </TableContainer>
     </>
   );
 }
