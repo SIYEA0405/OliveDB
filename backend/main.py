@@ -1,11 +1,13 @@
 from fastapi import FastAPI
-from api.endpoints.products import router
+from api.products import products_router
+from api.price_by_date import price_by_date_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
+    "http://api.olivedb.info",
+    "https://api.olivedb.info",
 ]
 
 app.add_middleware(
@@ -16,9 +18,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router, prefix="/api/endpoints")
-
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def get_names():
+    return {"Welcom": "api.olive.db"}
+
+
+app.include_router(products_router, prefix="/products")
+app.include_router(price_by_date_router, prefix="/price-by-date")
