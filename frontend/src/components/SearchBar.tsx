@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useQueryClient } from "@tanstack/react-query";
+
+import axios from "axios";
 import {
   InputGroup,
   InputLeftElement,
@@ -10,38 +11,33 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineSearch, AiOutlineSend } from "react-icons/ai";
 
-import { fetchProducts } from "@/services/api";
-
 interface SearchBarProps {}
 
 const SearchBar: React.FC<SearchBarProps> = () => {
-  const [searchTerm, setsearchTerm] = useState("");
+  const [searchProduct, setSearchProduct] = useState("");
   const router = useRouter();
-  const queryClient = useQueryClient();
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      const { data } = await fetchProducts(searchTerm);
-      queryClient.setQueryData(["products", searchTerm], data);
-      if (data.length === 1) {
-        router.push({
-          pathname: "/showProduct",
-          query: { id: data[0]._id },
-        });
-      } else {
-        router.push({
-          pathname: "/showProductList",
-          query: { searchTerm: searchTerm },
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    const response = await axios.get("/api/getProducts", {
+      params: {
+        search: searchProduct,
+      },
+    });
+    if (response.data.length === 1) {
+      router.push({
+        pathname: "/showProduct",
+        query: { result: JSON.stringify(response) },
+      });
+    } else {
+      router.push({
+        pathname: "/showProductList",
+        query: { result: JSON.stringify(response) },
+      });
     }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setsearchTerm(event.target.value);
+    setSearchProduct(event.target.value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
