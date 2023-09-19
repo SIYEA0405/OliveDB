@@ -7,9 +7,9 @@ export default async function handler(
   res: NextApiResponse<ProductDataProps[] | { message: string }>
 ) {
   const { search } = req.query;
-  const url = "http://127.0.0.1:8000/api/endpoints/products";
+  const apiUrl = process.env.NEXT_PUBLIC_API_KEY as string;
   try {
-    const response = await axios.get(url, {
+    const response = await axios.get(`${apiUrl}/products`, {
       params: {
         search: search,
       },

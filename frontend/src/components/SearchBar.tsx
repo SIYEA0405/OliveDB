@@ -15,14 +15,14 @@ import { fetchProducts } from "@/services/api";
 interface SearchBarProps {}
 
 const SearchBar: React.FC<SearchBarProps> = () => {
-  const [searchTerm, setsearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
   const queryClient = useQueryClient();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const { data } = await fetchProducts(searchTerm);
+      const data = await fetchProducts(searchTerm);
       queryClient.setQueryData(["products", searchTerm], data);
       if (data.length === 1) {
         router.push({
@@ -41,7 +41,7 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setsearchTerm(event.target.value);
+    setSearchTerm(event.target.value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
