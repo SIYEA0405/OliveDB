@@ -4,10 +4,10 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
 import { ProductDataProps } from "../../types";
+import { numberWithCommas } from "../../utils/numberUtils";
 
 interface ProductTableProps {
   data: ProductDataProps[];
@@ -30,15 +30,15 @@ const columns = [
   }),
   columnHelper.accessor("price.original", {
     header: "정가",
-    cell: (info) => info.getValue(),
+    cell: (info) => numberWithCommas(info.getValue()),
   }),
   columnHelper.accessor("price.current", {
     header: "현재가",
-    cell: (info) => info.getValue(),
+    cell: (info) => numberWithCommas(info.getValue()),
   }),
   columnHelper.accessor("price.lowest", {
     header: "최저가",
-    cell: (info) => info.getValue(),
+    cell: (info) => numberWithCommas(info.getValue()),
   }),
 ];
 
@@ -47,7 +47,6 @@ export default function ProductTable({ data }: ProductTableProps) {
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
   return (
