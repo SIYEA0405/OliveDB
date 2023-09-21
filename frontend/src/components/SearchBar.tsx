@@ -52,7 +52,7 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   };
   return (
     <>
-      <InputGroup border="3px solid #BBD94E" borderRadius="full">
+      <InputGroup borderWidth="3px" borderColor="gGreen" borderRadius="full">
         <InputLeftElement pointerEvents="none">
           <AiOutlineSearch className="icon" />
         </InputLeftElement>
@@ -67,8 +67,8 @@ const SearchBar: React.FC<SearchBarProps> = () => {
           onKeyDown={handleKeyDown}
         />
         <InputRightElement width="4rem">
-          <Button h="1.75rem" size="sm" onClick={handleSubmit} bg="#C3D973">
-            <AiOutlineSend color="#666666" />
+          <Button h="1.75rem" size="sm" onClick={handleSubmit} bg="gGreen">
+            <AiOutlineSend color="gBlack" />
           </Button>
         </InputRightElement>
       </InputGroup>

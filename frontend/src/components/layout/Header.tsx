@@ -9,9 +9,9 @@ const Header: React.FC<HeaderProps> = (props) => {
         <Link href="/">
           <Heading as="h1" size="4xl">
             <Flex>
-              <Text color="#BBD94E">O</Text>
+              <Text color="gGreen">O</Text>
               <Text>live</Text>
-              <Text color="#F27D72">DB</Text>
+              <Text color="gRed">DB</Text>
             </Flex>
           </Heading>
         </Link>
