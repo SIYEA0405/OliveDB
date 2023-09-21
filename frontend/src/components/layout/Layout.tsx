@@ -21,7 +21,7 @@ const Layout = ({ children }: LayoutProps) => {
         <link rel="icon" href="/oliveDB_logo.ico" />
       </Head>
       <CSSReset />
-      <VStack spacing={0} align="stretch" h="100vh" bg="#F2F2F2">
+      <VStack spacing={0} align="stretch" minH="100vh" bg="bodyBg">
         <Header flex="2" />
         <Box as="main" p="10%" flex="8" alignContent="center">
           <Flex
@@ -32,8 +32,8 @@ const Layout = ({ children }: LayoutProps) => {
             {children}
           </Flex>
         </Box>
+        <Footer />
       </VStack>
-      <Footer />
     </>
   );
 };

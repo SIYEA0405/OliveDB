@@ -10,3 +10,13 @@ export interface ProductDataProps {
   };
   small_ctg: string[];
 }
+
+interface DatesProps {
+  date: string;
+  price: number;
+}
+
+export interface PriceByDateDataProps {
+  _id: string;
+  dates: DatesProps[];
+}
