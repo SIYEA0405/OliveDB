@@ -52,12 +52,13 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   };
   return (
     <>
-      <InputGroup borderWidth="3px" borderColor="gGreen" borderRadius="full">
+      <InputGroup borderWidth="3px" borderColor="gGreen" borderRadius="full" bg="gWhite">
         <InputLeftElement pointerEvents="none">
           <AiOutlineSearch className="icon" />
         </InputLeftElement>
         <Input
           border="none"
+          borderRadius="full"
           placeholder="제품 이름을 입력해주세요"
           _focus={{
             outline: "none",
