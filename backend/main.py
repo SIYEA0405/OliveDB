@@ -23,9 +23,12 @@ app.add_middleware(
 def get_names():
     return {
         "Welcom": "api.olivedb.info",
-        "Search Products": "api.olivedb.info/products?search=[name]",
-        "Search Price By date": "api.olivedb.info/price-by-date?search_id=[search_id]",
-        "Example Data": {
+        "docs": "api.olivedb.info/docs",
+        "url": {
+            "Search Products": "api.olivedb.info/products?search=[name]",
+            "Search Price By date": "api.olivedb.info/price-by-date?search_id=[search_id]",
+        },
+        "example data": {
             "_id": "A000000186966",
             "brand": "라운드랩",
             "large_ctg": "스킨케어",
