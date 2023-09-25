@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+import subprocess
 from api.products import products_router
 from api.price_by_date import price_by_date_router
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,6 +18,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.post("/webhook")
+async def webhook(request: Request):
+    data = await request.json()
+    if data.get("ref") == "refs/heads/main":
+        subprocess.run(["./update_backend.sh"])
+    return {"status": "success"}
 
 
 @app.get("/")
